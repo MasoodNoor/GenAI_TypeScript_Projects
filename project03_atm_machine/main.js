@@ -2,7 +2,6 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 console.clear();
 console.log(chalk.white.bgBlue.bold('\t\tWELCOME TO GENAI ATM MACHINE\t\t'));
-// while (true) {
 console.log("Please register for new account");
 var userDetalis = await inquirer.prompt([
     {
@@ -49,53 +48,66 @@ if (userChoice.action == "Login") {
                 choices: ["Savings", "Current"]
             }
         ]);
-        let userAccount = await inquirer.prompt([{
-                name: "action",
-                type: "list",
-                message: "What you want to do today?",
-                choices: ["Withdrawal", "Quick Withdrawal", "Cancel"],
-            }]);
-        if (userAccount.action == "Withdrawal") {
-            console.clear();
-            let withdrawal = await inquirer.prompt([{
-                    name: "amount",
-                    type: "number",
-                    message: "Please enter the amount you want to withdraw",
-                }]);
-            if (withdrawal.amount > userBalance) {
-                console.log("You have insufficient balance");
-            }
-            else {
-                console.log("You have withdrawn " + withdrawal.amount);
-                userBalance -= withdrawal.amount;
-                console.log("Your new balance is " + userBalance);
-            }
-        }
-        else if (userAccount.action == "Quick Withdrawal") {
-            console.clear();
-            let withdrawal = await inquirer.prompt([{
-                    name: "amount",
+        while (true) {
+            let userAccount = await inquirer.prompt([{
+                    name: "action",
                     type: "list",
-                    message: "Please enter the amount you want to withdraw",
-                    choices: ["5000", "10000", "15000", "20000", "25000"]
+                    message: "What you want to do today?",
+                    choices: ["Withdrawal", "Quick Withdrawal", "Balance Inquiry", "Cancel"],
                 }]);
-            if (withdrawal.amount > userBalance) {
-                console.log("You have insufficient balance");
+            if (userAccount.action == "Withdrawal") {
+                console.clear();
+                let withdrawal = await inquirer.prompt([{
+                        name: "amount",
+                        type: "number",
+                        message: "Please enter the amount you want to withdraw",
+                    }]);
+                if (withdrawal.amount > userBalance) {
+                    console.log("You have insufficient balance");
+                }
+                else if (withdrawal.amount < 500) {
+                    console.log("Please enter a valid amount");
+                    console.log("Amount must not be less than 500");
+                }
+                else {
+                    console.log("You have withdrawn " + withdrawal.amount);
+                    userBalance -= withdrawal.amount;
+                    console.log("Your new balance is " + userBalance);
+                    break;
+                }
+            }
+            else if (userAccount.action == "Quick Withdrawal") {
+                console.clear();
+                let withdrawal = await inquirer.prompt([{
+                        name: "amount",
+                        type: "list",
+                        message: "Please enter the amount you want to withdraw",
+                        choices: ["5000", "10000", "15000", "20000", "25000"]
+                    }]);
+                if (withdrawal.amount > userBalance) {
+                    console.log("You have insufficient balance");
+                }
+                else {
+                    console.log("You have withdrawn " + withdrawal.amount);
+                    userBalance -= withdrawal.amount;
+                    console.log("Your new balance is " + userBalance);
+                    break;
+                }
+            }
+            else if (userAccount.action == "Balance Inquiry") {
+                console.log(`Your current balance is: ${userBalance}`);
+                break;
+            }
+            else if (userAccount.action == "Cancel") {
+                console.log("Thank you, See you soon");
+                break;
             }
             else {
-                console.log("You have withdrawn " + withdrawal.amount);
-                userBalance -= withdrawal.amount;
-                console.log("Your new balance is " + userBalance);
+                console.log("You have entered wrong credentials");
             }
         }
-        else if (userChoice.action == "Cancel") {
-            console.log("Thank you, See you soon");
-        }
-        else {
-            console.log("You have entered wrong credentials");
-        }
     }
-    else if (userChoice.action == "Cancel") {
-        console.log("Thank you, See you soon");
-    }
+}
+else if (userChoice.action == "Cancel") {
+    console.log("Thank you, See you soon");
 }
