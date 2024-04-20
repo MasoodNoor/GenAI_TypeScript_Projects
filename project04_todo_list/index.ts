@@ -37,8 +37,23 @@ async function mainMenu() {
             console.log("Thank you, See you soon");
             return;
     }
-    mainMenu();
-     
+    let { reRunTask } = await inquirer.prompt({
+        name:'reRunTask',
+        type: 'confirm',
+        message: 'Would you like to continue?'
+    }) 
+    
+    switch (reRunTask) {
+        case true:
+            mainMenu();
+            break;
+        
+        case false:
+            console.log("Thank you, See you soon");
+            break;
+    
+    }
+    
 }
 
 
@@ -55,11 +70,11 @@ let addtask = async () => {
     console.log(`The following task ${chalk.green.bold(task)} has added in your ToDo list.`);
 }
 let viewalltasks = () => {
-    console.log(`***************TODO LIST****************`);
+    console.log(`${chalk.bold.yellow("***************")}${chalk.bold.greenBright("TODO LIST")}${chalk.bold.yellow("***************")}`);
     todoList.forEach((item, index) => {
         console.log(`\t${index + 1}.[${item.completed ? '✅' : '⭕'}] ${item.task}`);    
     }); 
-    console.log(`****************************************`);
+    console.log(`${chalk.bold.yellow("***************************************")}`);
     
  }
 let edittask = async () => { }
@@ -72,7 +87,7 @@ let completetask = async () => {
         message: 'Which task would you like to complete?'
     });
     if (index < 1 || index > todoList.length) {
-        console.log("Please try again");
+        console.log("Task number is invalid. Please try again");
         return;
     }
     todoList[index - 1].completed = true;
