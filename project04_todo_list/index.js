@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
 import chalk from "chalk";
+console.log(chalk.bgBlue.white.bold("\n\tWelcome GenAI TodoList \n"));
 let todoList = [];
 async function mainMenu() {
     const { action } = await inquirer.prompt({
@@ -61,7 +62,26 @@ let viewalltasks = () => {
     });
     console.log(`${chalk.bold.yellow("***************************************")}`);
 };
-let edittask = async () => { };
+let edittask = async () => {
+    viewalltasks();
+    let { index } = await inquirer.prompt({
+        name: 'index',
+        type: 'number',
+        message: 'Which task would you like to edit?'
+    });
+    if (index < 1 || index > todoList.length) {
+        console.log("Task number is invalid. Please try again");
+        return;
+    }
+    const { updatedTask } = await inquirer.prompt({
+        name: 'updatedTask',
+        type: 'input',
+        message: 'Enter the updated task:',
+    });
+    console.log(todoList[index - 1]);
+    let newUpdatedTask = todoList[index - 1].task = updatedTask;
+    console.log(`The ${chalk.green.bold(newUpdatedTask)} task has been updated`);
+};
 let completetask = async () => {
     viewalltasks();
     let { index } = await inquirer.prompt({
@@ -78,9 +98,9 @@ let completetask = async () => {
     // todoList[index].completed = true;
     // console.log(`${todoList[index].task}, completed`);
 };
-async function deletetask() {
+let deletetask = async () => {
     viewalltasks();
-    const { deleteTaskIndex } = await inquirer.prompt({
+    let { deleteTaskIndex } = await inquirer.prompt({
         name: 'deleteTaskIndex',
         type: 'number',
         message: 'Enter the index number of the task to delete:',
@@ -89,7 +109,7 @@ async function deletetask() {
         console.log("Please enter a valid task number.");
         return;
     }
-    const deletedTask = todoList.splice(deleteTaskIndex - 1, 1)[0]; // Remove and return the deleted element
+    let deletedTask = todoList.splice(deleteTaskIndex - 1, 1)[0]; // Remove and return the deleted element
     console.log(`The following task ${chalk.red.strikethrough(deletedTask.task)} has been removed from your ToDo list.`);
-}
+};
 mainMenu();
