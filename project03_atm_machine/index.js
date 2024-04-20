@@ -2,8 +2,9 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 console.clear();
 console.log(chalk.white.bgBlue.bold("\t\tWELCOME TO GENAI ATM MACHINE\t\t"));
-console.log("Please register for new account");
-var userDetalis = await inquirer.prompt([
+console.log("Please register a new account in our bank.");
+let userBalance = 30000;
+let userDetalis = await inquirer.prompt([
     {
         name: "userName",
         type: "String",
@@ -17,7 +18,7 @@ var userDetalis = await inquirer.prompt([
 ]);
 console.log("Thank you signing up, Please enter your details for withdrawal");
 console.log(`Your name ${userDetalis.userName} and your password ${userDetalis.userPin}`);
-var userChoice = await inquirer.prompt([
+let userChoice = await inquirer.prompt([
     {
         name: "action",
         type: "list",
@@ -39,7 +40,6 @@ if (userChoice.action == "Login") {
             message: "Please enter your pin",
         },
     ]);
-    var userBalance = 30000;
     if (userDetalis.userName == userId.userNameId &&
         userDetalis.userPin == userId.userPinId) {
         console.log("You have logged in successfully");
@@ -125,11 +125,27 @@ if (userChoice.action == "Login") {
                 choices: ["Yes", "No"],
             }
         ]);
+        // Date and time functions and formatting
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }); // Example: 04/21/2024
+        const formattedTime = currentDate.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true, // Use 12-hour format (optional)
+        }); // Example: 04:39 PM
+        // Date and time functions are formatting
         if (userReceipt.receipt == "Yes") {
-            console.clear;
+            console.clear();
             console.log(`${chalk.bold.bgWhite("--------------------------------")}`);
-            console.log();
-            console.log();
+            console.log(`${chalk.gray.bold(`Date: ${formattedDate} Time:${formattedTime}`)}`);
+            console.log(`${chalk.gray.bold(`Account number: 00${Math.floor(Math.random() * 50000 + 1)}`)}`);
+            console.log(`${chalk.gray.bold(`Customer name: ${chalk.bold(userDetalis.userName)}`)}`);
+            console.log(`${chalk.gray.bold(`Available Balance: ${chalk.bold(userBalance)}`)}`);
+            console.log(`${chalk.gray.bold(`App Name: ${chalk.bold(`GENAI ATM MACHINE`)}`)}`);
             console.log(`${chalk.bold.bgWhite("--------------------------------")}`);
         }
         else if (userReceipt.receipt == "No") {
@@ -138,6 +154,7 @@ if (userChoice.action == "Login") {
     }
     else {
         console.log("You have entered wrong credentials");
+        console.log("Please create a new credentials");
     }
 }
 else if (userChoice.action == "Cancel") {
